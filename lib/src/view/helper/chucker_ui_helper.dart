@@ -128,4 +128,19 @@ class ChuckerFlutter {
 
   ///[showChuckerScreen] navigates to the chucker home screen
   static void showChuckerScreen() => ChuckerUiHelper.showChuckerScreen();
+    ///[showNotificationOptions] show notification on toast or notification bar.
+  static ShowNotificationOptions showNotificationOptions =
+      ShowNotificationOptions.toast;
+
+  /// init [NotificationService] for showing notification
+  static void withLocalNotification() {
+    showNotificationOptions = !kIsWeb
+        ? ShowNotificationOptions.notification
+        : ShowNotificationOptions.toast;
+    if (showNotificationOptions == ShowNotificationOptions.notification) {
+      NotificationService.init(
+        navigatorObserver: ChuckerFlutter.navigatorObserver,
+      );
+    }
+  }
 }
