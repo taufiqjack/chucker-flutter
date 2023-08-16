@@ -104,7 +104,9 @@ void main() {
 
     const prettyJson = '''
 {
-     "title": "foo"
+     "request": {
+          "title": "foo"
+     }
 }''';
 
     final responses = await sharedPreferencesManager.getAllApiResponses();
@@ -133,14 +135,16 @@ void main() {
     await myChuckerHttpClient.send(request);
 
     const prettyJson = '''
-[
-     {
-          "key": "123"
-     },
-     {
-          "file": "a.png"
-     }
-]''';
+{
+     "request": [
+          {
+               "key": "123"
+          },
+          {
+               "file": "a.png"
+          }
+     ]
+}''';
 
     final responses = await sharedPreferencesManager.getAllApiResponses();
 

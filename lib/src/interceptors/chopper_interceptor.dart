@@ -1,3 +1,5 @@
+// ignore_for_file: use_if_null_to_convert_nulls_to_bools
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -16,13 +18,13 @@ class ChuckerChopperInterceptor extends ResponseInterceptor {
     await SharedPreferencesManager.getInstance().getSettings();
 
     if (ChuckerFlutter.isDebugMode || ChuckerFlutter.showOnRelease) {
-      ChuckerUiHelper.showNotification(
+      await _saveResponse(response, time);
+      await ChuckerUiHelper.showNotification(
         method: response.base.request?.method ?? '',
         statusCode: response.statusCode,
         path: response.base.request?.url.path ?? '',
         requestTime: time,
       );
-      await _saveResponse(response, time);
     }
     return response;
   }
@@ -50,7 +52,7 @@ class ChuckerChopperInterceptor extends ResponseInterceptor {
             response.base.request?.url.queryParameters.toString() ??
                 emptyString,
         receiveTimeout: 0,
-        request: _requestBody(response),
+        request: {'request': _requestBody(response)},
         requestSize: 2,
         requestTime: time,
         responseSize: 2,
@@ -80,15 +82,17 @@ class ChuckerChopperInterceptor extends ResponseInterceptor {
     }
 
     if (response.base.request is http.Request) {
-      final request = response.base.request! as http.Request;
-      return request.body.isNotEmpty ? _getRequestBody(request) : emptyString;
+      final request = response.base.request as http.Request?;
+      return request?.body.isNotEmpty == true
+          ? _getRequestBody(request)
+          : emptyString;
     }
     return emptyString;
   }
 
-  dynamic _getRequestBody(http.Request request) {
+  dynamic _getRequestBody(http.Request? request) {
     try {
-      return jsonDecode(request.body);
+      return jsonDecode(request!.body);
       // ignore: empty_catches
     } catch (e) {}
   }
