@@ -122,3 +122,32 @@
 
 * Fix: Error response parsing failed in dio interceptor
 * Fix: Error response parsing failed in http logging interceptor
+
+## 1.5.2
+
+* Chore: Dependencies update
+* Some fixes and improvements
+
+## 1.6.0
+* Feat: Added helping logs
+* Feat: Added support for `showNotification` key to ignore in-app notifications
+
+## 1.6.1
+* Chore: Chopper updated to version 7.0.8
+
+## 1.6.2
+* Fix: Headers erasing due to Chucker Http Client. Thanks to @Serproger
+
+## 1.6.3
+* Fix: Some UI test failures
+* Chore: Added a logo for pub.dev
+
+## 1.7.0
+* Fix: Some UI issues
+* Chore: Dependencies update
+
+## 1.7.1
+* Chore: Dependencies update
+
+## 1.7.2
+* Readme update

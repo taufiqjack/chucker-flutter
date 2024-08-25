@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:chucker_flutter/src/helpers/constants.dart';
 import 'package:chucker_flutter/src/helpers/shared_preferences_manager.dart';
@@ -65,27 +66,35 @@ class ChuckerHttpClient extends BaseClient {
 
     final interceptedResponse = onResponse(response);
 
-    if (!ChuckerFlutter.isDebugMode && !ChuckerFlutter.showOnRelease) {
-      return StreamedResponse(ByteStream.fromBytes(bytes), response.statusCode);
+    if (ChuckerFlutter.isDebugMode || ChuckerFlutter.showOnRelease) {
+      ChuckerUiHelper.showNotification(
+        method: interceptedRequest.method,
+        statusCode: interceptedResponse.statusCode,
+        path: interceptedRequest.url.path,
+        requestTime: _requestTime,
+      );
+
+      await _saveResponse(
+        interceptedRequest,
+        bytes,
+        response.statusCode,
+        response.contentLength?.toDouble() ?? 0,
+        response.headers['content-type'] ??
+            response.headers['Content-Type'] ??
+            'N/A',
+      );
     }
 
-    await _saveResponse(
-      interceptedRequest,
-      bytes,
+    return StreamedResponse(
+      ByteStream.fromBytes(bytes),
       response.statusCode,
-      response.contentLength?.toDouble() ?? 0,
-      response.headers['content-type'] ??
-          response.headers['Content-Type'] ??
-          'N/A',
+      contentLength: response.contentLength,
+      request: response.request,
+      headers: response.headers,
+      isRedirect: response.isRedirect,
+      persistentConnection: response.persistentConnection,
+      reasonPhrase: response.reasonPhrase,
     );
-    await ChuckerUiHelper.showNotification(
-      method: interceptedRequest.method,
-      statusCode: interceptedResponse.statusCode,
-      path: interceptedRequest.url.path,
-      requestTime: _requestTime,
-    );
-
-    return StreamedResponse(ByteStream.fromBytes(bytes), response.statusCode);
   }
 
   Future<void> _saveResponse(
@@ -123,7 +132,7 @@ class ChuckerHttpClient extends BaseClient {
         headers: request.headers.toString(),
         queryParameters: request.url.queryParameters.toString(),
         receiveTimeout: 0,
-        request: {'request': requestBody},
+        request: requestBody,
         requestSize: request.contentLength?.toDouble() ?? 0,
         requestTime: _requestTime,
         responseSize: contentLength,
@@ -134,6 +143,11 @@ class ChuckerHttpClient extends BaseClient {
         clientLibrary: 'Http',
       ),
     );
+
+    final method = request.method;
+    final path = request.url.path;
+
+    log('ChuckerFlutter: $method:$path($statusCode) saved.');
   }
 
   dynamic _getRequestBody(Request request) {

@@ -13,7 +13,7 @@ void main() {
         ),
       );
 
-      final shown = await ChuckerUiHelper.showNotification(
+      final shown = ChuckerUiHelper.showNotification(
         method: 'GET',
         statusCode: 200,
         path: '/',
@@ -62,6 +62,7 @@ void main() {
         requestTime: DateTime.now(),
       );
       // ignore: flutter_style_todos
+      //TODO Need to revisit this
       await tester.pumpAndSettle(const Duration(seconds: 1));
     },
   );

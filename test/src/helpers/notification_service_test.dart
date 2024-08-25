@@ -1,5 +1,6 @@
 import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:chucker_flutter/src/helpers/notification_service.dart';
+import 'package:chucker_flutter/src/helpers/show_notification_options.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 

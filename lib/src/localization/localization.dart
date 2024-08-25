@@ -1,6 +1,6 @@
 import 'package:chucker_flutter/src/view/helper/languages.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 part 'localization.ur.dart';
 part 'localization.en.dart';
@@ -12,9 +12,9 @@ class Localization {
 
   ///Localization delegates for maintaining localized ui behaviour
   static const localizationsDelegates = [
-    DefaultMaterialLocalizations.delegate,
-    DefaultWidgetsLocalizations.delegate,
-    DefaultCupertinoLocalizations.delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
   ];
 
   ///Current locale. It can be changed from settings page

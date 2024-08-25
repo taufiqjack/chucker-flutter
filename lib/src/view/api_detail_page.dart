@@ -44,7 +44,15 @@ class _ApiDetailsPageState extends State<ApiDetailsPage> {
             ),
             IconButton(
               onPressed: () {
-                Share.share(widget.api.toString());
+                Share.share(
+                  widget.api.toString(),
+                  sharePositionOrigin: Rect.fromLTWH(
+                    0,
+                    0,
+                    MediaQuery.of(context).size.width,
+                    MediaQuery.of(context).size.height / 2,
+                  ),
+                );
               },
               icon: const Icon(Icons.share),
             ),
@@ -83,7 +91,7 @@ class _ApiDetailsPageState extends State<ApiDetailsPage> {
                         onShufflePreview: _shuffleResponsePreviewType,
                         json: widget.api.body,
                         prettyJson: widget.api.prettyJson,
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -152,7 +160,7 @@ class _PreviewModeControl extends StatelessWidget {
                 height: 34,
                 text: type,
                 style: context.textTheme.bodyMedium!.toBold(),
-              )
+              ),
             ],
           ),
         ),
@@ -203,7 +211,7 @@ class _ResponseTab extends StatelessWidget {
                 spreadRadius: 2,
                 blurRadius: 7,
                 offset: const Offset(0, 8),
-              )
+              ),
             ],
           ),
           child: _PreviewModeControl(
@@ -271,7 +279,7 @@ class _RequestTab extends StatelessWidget {
                 spreadRadius: 2,
                 blurRadius: 7,
                 offset: const Offset(0, 8),
-              )
+              ),
             ],
           ),
           child: _PreviewModeControl(

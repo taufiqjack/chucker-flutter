@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:chucker_flutter/src/helpers/constants.dart';
 import 'package:chucker_flutter/src/helpers/shared_preferences_manager.dart';
@@ -9,7 +10,6 @@ import 'package:dio/dio.dart';
 ///[ChuckerDioInterceptor] adds support for `chucker_flutter` in [Dio] library.
 class ChuckerDioInterceptor extends Interceptor {
   late DateTime _requestTime;
-
   @override
   Future<void> onRequest(
     RequestOptions options,
@@ -25,37 +25,53 @@ class ChuckerDioInterceptor extends Interceptor {
     ResponseInterceptorHandler handler,
   ) async {
     await SharedPreferencesManager.getInstance().getSettings();
+
     if (!ChuckerFlutter.isDebugMode && !ChuckerFlutter.showOnRelease) {
       handler.next(response);
       return;
     }
-    await _saveResponse(response);
-    await ChuckerUiHelper.showNotification(
-      method: response.requestOptions.method,
-      statusCode: response.statusCode ?? -1,
-      path: response.requestOptions.uri.path,
+
+    final method = response.requestOptions.method;
+    final statusCode = response.statusCode ?? -1;
+    final path = response.requestOptions.path;
+
+    ChuckerUiHelper.showNotification(
+      method: method,
+      statusCode: statusCode,
+      path: path,
       requestTime: _requestTime,
     );
 
+    await _saveResponse(response);
+
+    log('ChuckerFlutter: $method:$path - $statusCode saved.');
     handler.next(response);
   }
 
   @override
-  Future<void> onError(DioError err, ErrorInterceptorHandler handler) async {
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
     await SharedPreferencesManager.getInstance().getSettings();
 
     if (!ChuckerFlutter.isDebugMode && !ChuckerFlutter.showOnRelease) {
       handler.next(err);
       return;
     }
-    await _saveError(err);
-    await ChuckerUiHelper.showNotification(
-      method: err.requestOptions.method,
-      statusCode: err.response?.statusCode ?? -1,
-      path: err.requestOptions.uri.path,
+    final method = err.requestOptions.method;
+    final statusCode = err.response?.statusCode ?? -1;
+    final path = err.requestOptions.path;
+
+    ChuckerUiHelper.showNotification(
+      method: method,
+      statusCode: statusCode,
+      path: path,
       requestTime: _requestTime,
     );
+    await _saveError(err);
 
+    log('ChuckerFlutter: $method:$path - $statusCode saved.');
     handler.next(err);
   }
 
@@ -74,9 +90,7 @@ class ChuckerDioInterceptor extends Interceptor {
         queryParameters: response.requestOptions.queryParameters.toString(),
         receiveTimeout:
             response.requestOptions.receiveTimeout?.inMilliseconds ?? 0,
-        request: {
-          'request': _separateFileObjects(response.requestOptions).data
-        },
+        request: _separateFileObjects(response.requestOptions).data,
         requestSize: 2,
         requestTime: _requestTime,
         responseSize: 2,
@@ -97,7 +111,7 @@ class ChuckerDioInterceptor extends Interceptor {
     }
   }
 
-  Future<void> _saveError(DioError response) async {
+  Future<void> _saveError(DioException response) async {
     await SharedPreferencesManager.getInstance().addApiResponse(
       ApiResponse(
         body: _getJson(response.response.toString()),
@@ -112,9 +126,7 @@ class ChuckerDioInterceptor extends Interceptor {
         queryParameters: response.requestOptions.queryParameters.toString(),
         receiveTimeout:
             response.requestOptions.receiveTimeout?.inMilliseconds ?? 0,
-        request: {
-          'request': _separateFileObjects(response.requestOptions).data
-        },
+        request: _separateFileObjects(response.requestOptions).data,
         requestSize: 2,
         requestTime: _requestTime,
         responseSize: 2,

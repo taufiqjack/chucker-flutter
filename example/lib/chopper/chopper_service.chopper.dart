@@ -18,8 +18,8 @@ class _$ChopperApiService extends ChopperApiService {
 
   @override
   Future<Response<dynamic>> get() {
-    final $url = 'https://jsonplaceholder.typicode.com/posts/1';
-    final $request = Request(
+    final Uri $url = Uri.parse('https://jsonplaceholder.typicode.com/posts/1');
+    final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
@@ -29,8 +29,8 @@ class _$ChopperApiService extends ChopperApiService {
 
   @override
   Future<Response<dynamic>> getError() {
-    final $url = 'https://jsonplaceholder.typicode.com/error';
-    final $request = Request(
+    final Uri $url = Uri.parse('https://jsonplaceholder.typicode.com/error');
+    final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
@@ -40,8 +40,9 @@ class _$ChopperApiService extends ChopperApiService {
 
   @override
   Future<Response<dynamic>> getWithParams() {
-    final $url = 'https://jsonplaceholder.typicode.com/posts?userId=1';
-    final $request = Request(
+    final Uri $url =
+        Uri.parse('https://jsonplaceholder.typicode.com/posts?userId=1');
+    final Request $request = Request(
       'GET',
       $url,
       client.baseUrl,
@@ -51,9 +52,9 @@ class _$ChopperApiService extends ChopperApiService {
 
   @override
   Future<Response<dynamic>> post(dynamic body) {
-    final $url = 'https://jsonplaceholder.typicode.com/posts';
+    final Uri $url = Uri.parse('https://jsonplaceholder.typicode.com/posts');
     final $body = body;
-    final $request = Request(
+    final Request $request = Request(
       'POST',
       $url,
       client.baseUrl,
@@ -64,9 +65,9 @@ class _$ChopperApiService extends ChopperApiService {
 
   @override
   Future<Response<dynamic>> put(Map<String, dynamic> body) {
-    final $url = 'https://jsonplaceholder.typicode.com/posts/1';
+    final Uri $url = Uri.parse('https://jsonplaceholder.typicode.com/posts/1');
     final $body = body;
-    final $request = Request(
+    final Request $request = Request(
       'PUT',
       $url,
       client.baseUrl,
@@ -77,8 +78,8 @@ class _$ChopperApiService extends ChopperApiService {
 
   @override
   Future<Response<dynamic>> delete() {
-    final $url = 'https://jsonplaceholder.typicode.com/posts/1';
-    final $request = Request(
+    final Uri $url = Uri.parse('https://jsonplaceholder.typicode.com/posts/1');
+    final Request $request = Request(
       'DELETE',
       $url,
       client.baseUrl,
@@ -88,9 +89,9 @@ class _$ChopperApiService extends ChopperApiService {
 
   @override
   Future<Response<dynamic>> patch(Map<String, dynamic> body) {
-    final $url = 'https://jsonplaceholder.typicode.com/posts/1';
+    final Uri $url = Uri.parse('https://jsonplaceholder.typicode.com/posts/1');
     final $body = body;
-    final $request = Request(
+    final Request $request = Request(
       'PATCH',
       $url,
       client.baseUrl,
@@ -104,8 +105,8 @@ class _$ChopperApiService extends ChopperApiService {
     http.MultipartFile body, {
     String key = '6d207e02198a847aa98d0a2a901485a5',
   }) {
-    final $url = 'https://freeimage.host/api/1/upload';
-    final $parts = <PartValue>[
+    final Uri $url = Uri.parse('https://freeimage.host/api/1/upload');
+    final List<PartValue> $parts = <PartValue>[
       PartValue<String>(
         'key',
         key,
@@ -115,7 +116,7 @@ class _$ChopperApiService extends ChopperApiService {
         body,
       ),
     ];
-    final $request = Request(
+    final Request $request = Request(
       'POST',
       $url,
       client.baseUrl,

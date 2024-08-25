@@ -1,7 +1,7 @@
-import 'package:chucker_flutter/chucker_flutter.dart';
 import 'package:chucker_flutter/src/helpers/extensions.dart';
 import 'package:chucker_flutter/src/helpers/notification_service.dart';
 import 'package:chucker_flutter/src/helpers/shared_preferences_manager.dart';
+import 'package:chucker_flutter/src/helpers/show_notification_options.dart';
 import 'package:chucker_flutter/src/localization/localization.dart';
 
 import 'package:chucker_flutter/src/models/settings.dart';
@@ -189,6 +189,10 @@ class ChuckerFlutter {
 
   ///[isDebugMode] A wrapper of Flutter's `kDebugMode` constant
   static bool isDebugMode = kDebugMode;
+
+  ///[showNotification] decides whether to show in app notification or not
+  ///By default its value is `true`
+  static bool showNotification = true;
 
   ///[ChuckerButton] can be placed anywhere in the UI to open Chucker Screen
   static final chuckerButton = isDebugMode || ChuckerFlutter.showOnRelease
