@@ -99,14 +99,16 @@ void main() {
     await dio.post<dynamic>(successPath, data: formData);
 
     const prettyJson = '''
-[
-     {
-          "key": "123"
-     },
-     {
-          "file": "a.png"
-     }
-]''';
+{
+     "request": [
+          {
+               "key": "123"
+          },
+          {
+               "file": "a.png"
+          }
+     ]
+}''';
 
     final responses = await sharedPreferencesManager.getAllApiResponses();
 

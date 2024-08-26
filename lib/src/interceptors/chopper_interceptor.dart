@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:chopper/chopper.dart';
 import 'package:chucker_flutter/src/helpers/constants.dart';
@@ -10,20 +9,20 @@ import 'package:chucker_flutter/src/view/helper/chucker_ui_helper.dart';
 import 'package:http/http.dart' as http;
 
 ///[ChuckerChopperInterceptor] adds support for `chucker_flutter` in Chopper
-class ChuckerChopperInterceptor implements ResponseInterceptor {
+class ChuckerChopperInterceptor extends ResponseInterceptor {
   @override
   FutureOr<Response<dynamic>> onResponse(Response<dynamic> response) async {
     final time = DateTime.now();
     await SharedPreferencesManager.getInstance().getSettings();
 
     if (ChuckerFlutter.isDebugMode || ChuckerFlutter.showOnRelease) {
+      await _saveResponse(response, time);
       await ChuckerUiHelper.showNotification(
         method: response.base.request?.method ?? '',
         statusCode: response.statusCode,
         path: response.base.request?.url.path ?? '',
         requestTime: time,
       );
-      await _saveResponse(response, time);
     }
     return response;
   }
@@ -51,7 +50,7 @@ class ChuckerChopperInterceptor implements ResponseInterceptor {
             response.base.request?.url.queryParameters.toString() ??
                 emptyString,
         receiveTimeout: 0,
-        request: _requestBody(response),
+        request: {'request': _requestBody(response)},
         requestSize: 2,
         requestTime: time,
         responseSize: 2,
@@ -62,12 +61,6 @@ class ChuckerChopperInterceptor implements ResponseInterceptor {
         clientLibrary: 'Chopper',
       ),
     );
-
-    final method = response.base.request?.method ?? '';
-    final statusCode = response.statusCode;
-    final path = response.base.request?.url.path ?? '';
-
-    log('ChuckerFlutter: $method:$path($statusCode) saved.');
   }
 
   String _requestType(Response<dynamic> response) {
@@ -87,15 +80,17 @@ class ChuckerChopperInterceptor implements ResponseInterceptor {
     }
 
     if (response.base.request is http.Request) {
-      final request = response.base.request! as http.Request;
-      return request.body.isNotEmpty ? _getRequestBody(request) : emptyString;
+      final request = response.base.request as http.Request?;
+      return request?.body.isNotEmpty == true
+          ? _getRequestBody(request)
+          : emptyString;
     }
     return emptyString;
   }
 
-  dynamic _getRequestBody(http.Request request) {
+  dynamic _getRequestBody(http.Request? request) {
     try {
-      return jsonDecode(request.body);
+      return jsonDecode(request!.body);
       // ignore: empty_catches
     } catch (e) {}
   }

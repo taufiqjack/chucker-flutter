@@ -13,7 +13,7 @@ void main() {
         ),
       );
 
-      final shown = ChuckerUiHelper.showNotification(
+      final shown = await ChuckerUiHelper.showNotification(
         method: 'GET',
         statusCode: 200,
         path: '/',

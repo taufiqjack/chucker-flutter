@@ -29,7 +29,7 @@ class NotificationService {
       flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
               AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestNotificationsPermission(),
+          ?.requestPermission(),
     );
     const initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');

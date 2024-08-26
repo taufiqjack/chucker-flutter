@@ -147,7 +147,7 @@ class _NotificationState extends State<Notification>
                     },
                     text: Localization.strings['details']!,
                     foreColor: Colors.white,
-                  ),
+                  )
                 ],
               ),
             ),
@@ -162,12 +162,7 @@ class _NotificationState extends State<Notification>
       widget.requestTime,
     );
     await ChuckerFlutter.navigatorObserver.navigator?.push(
-      MaterialPageRoute<dynamic>(
-        builder: (_) => Theme(
-          data: ThemeData.light(useMaterial3: false),
-          child: ApiDetailsPage(api: api),
-        ),
-      ),
+      MaterialPageRoute<dynamic>(builder: (_) => ApiDetailsPage(api: api)),
     );
   }
 
